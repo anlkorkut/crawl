@@ -4,6 +4,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
 from bs4 import BeautifulSoup
 import pandas as pd
 import json
@@ -37,7 +38,14 @@ def setup_selenium():
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36")
-    return webdriver.Chrome(options=options)
+
+    # Set the binary location to the installed Chromium
+    options.binary_location = '/usr/bin/chromium'
+
+    # Use the Service object to specify the chromedriver location
+    service = Service(executable_path="/usr/bin/chromedriver")
+
+    return webdriver.Chrome(service=service, options=options)
 
 def scroll_page(driver):
     """Scroll the page to load dynamic content."""
